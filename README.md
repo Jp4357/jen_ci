@@ -38,4 +38,7 @@ cd jenkins && docker compose up -d --build
 
 In GitHub, add a webhook (Settings, Webhooks) with the smee URL as payload URL, content type `application/json`, push events only.
 
-Open http://localhost:8080 and unlock Jenkins with the password from `docker compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`. Then create a Pipeline job: "Pipeline script from SCM", Git, this repo's URL, branch `*/main`, script path `Jenkinsfile`.
+Open http://localhost:8080 and unlock Jenkins with the password from `docker compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`. Then create a Pipeline job: "Pipeline script from SCM", Git, this repo's URL, branch `*/main`, script path `Jenkinsfile`. 
+
+
+### I AM DOING TESTING 
