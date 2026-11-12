@@ -7,6 +7,7 @@ A small chat app built with FastAPI, the OpenAI API and React, used to learn CI/
 - `backend/`: FastAPI app (`app/`) and tests (`tests/`)
 - `frontend/`: React + TypeScript (Vite)
 - `Jenkinsfile`: CI pipeline (test, build, Docker images)
+- `jenkins/`: local Jenkins in Docker, with `uv`, `node` and the Docker CLI
 
 ## Run locally
 
@@ -27,4 +28,14 @@ cd backend && uv run pytest
 
 ## CI
 
-On every push, Jenkins runs the backend tests, builds the frontend, and builds both Docker images. The Jenkins agent needs `uv`, `node` and `docker`. In Jenkins, create a Pipeline job that points at this GitHub repo and uses the `Jenkinsfile`, then add a GitHub webhook to `http://<jenkins-host>/github-webhook/`.
+On every push, a GitHub webhook triggers Jenkins, which runs the backend tests, builds the frontend, and builds both Docker images. The webhook reaches local Jenkins through a [smee.io](https://smee.io) relay.
+
+Create a channel at https://smee.io/new, put `SMEE_URL=<channel url>` in `jenkins/.env`, then:
+
+```
+cd jenkins && docker compose up -d --build
+```
+
+In GitHub, add a webhook (Settings, Webhooks) with the smee URL as payload URL, content type `application/json`, push events only.
+
+Open http://localhost:8080 and unlock Jenkins with the password from `docker compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`. Then create a Pipeline job: "Pipeline script from SCM", Git, this repo's URL, branch `*/main`, script path `Jenkinsfile`.
